@@ -98,6 +98,7 @@ class VerifyModal(discord.ui.Modal, title="ContestDojo Verification"):
         if (
             student.customFields is not None
             and (id := student.customFields.get("discord-id", "")) != ""
+            and id != str(interaction.user.id)
         ):
             user = await self.bot.fetch_user(int(id))
             return await interaction.response.send_message(
