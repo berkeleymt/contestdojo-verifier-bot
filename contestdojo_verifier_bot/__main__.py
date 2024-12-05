@@ -1,6 +1,7 @@
+import aiohttp
 import discord
-import traceback
 import os
+import traceback
 from contestdojo_api_client import Client as ContestDojoClient
 from contestdojo_api_client.structs import EventStudent
 
@@ -15,6 +16,11 @@ class Client(discord.Client):
         intents.message_content = True
         super().__init__(intents=intents)
         self.cd = ContestDojoClient(CONTESTDOJO_API_KEY)
+
+    async def _async_setup_hook(self):
+        # https://github.com/Rapptz/discord.py/pull/9870
+        await super()._async_setup_hook()
+        self.http.connector = aiohttp.TCPConnector(limit=0)
 
     async def setup_hook(self):
         self.view = VerifyView(self)
