@@ -9,6 +9,18 @@ EVENT_ID = "JHVrMPgX08z7kdmZP8Cs"
 CONTESTDOJO_API_KEY = os.environ["CONTESTDOJO_API_KEY"]
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 
+VERIFY_TEXT = """
+Welcome to the BMT 2024 Online Discord server!
+
+To gain access to the channels, please first verify yourself with ContestDojo
+using the button below. You will be prompted to enter the email address you used
+to register for the event. This is the same email address you will use to login
+to the website to take your tests.
+
+Once you are verified, you will be able to see the rest of the server. If you
+have trouble verifying, please reach out to server staff or open a ticket.
+""".strip()
+
 
 class Client(discord.Client):
     def __init__(self):
@@ -34,7 +46,7 @@ class Client(discord.Client):
             and self.view is not None
         ):
             await message.delete()
-            await message.channel.send(view=self.view)
+            await message.channel.send(VERIFY_TEXT, view=self.view)
 
     async def find_student_by_email(self, email: str):
         matches = await self.cd.list_event_students(EVENT_ID, email=email)
